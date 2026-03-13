@@ -1,0 +1,57 @@
+#include <stdio.h>
+
+int main() {
+    int n,i,j;
+    int at[20],bt[20],ct[20],tat[20],wt[20];
+    float avg_tat=0, avg_wt=0;
+    int temp;
+
+    printf("Enter number of processes: ");
+    scanf("%d",&n);
+
+    for(i=0;i<n;i++){
+        printf("Arrival time for P%d: ",i+1);
+        scanf("%d",&at[i]);
+        printf("Bus time for P%d: ",i+1);
+        scanf("%d",&bt[i]);
+    }
+
+    for(i=0;i<n-1;i++){
+        for(j=i+1;j<n;j++){
+            if(at[i]>at[j]){
+                temp=at[i]; at[i]=at[j]; at[j]=temp;
+                temp=bt[i]; bt[i]=bt[j]; bt[j]=temp;
+            }
+        }
+    }
+
+    int time=0;
+
+    for(i=0;i<n;i++){
+        if(time<at[i])
+            time=at[i];
+
+        ct[i]=time+bt[i];
+        tat[i]=ct[i]-at[i];
+        wt[i]=tat[i]-bt[i];
+
+        avg_tat += tat[i];
+        avg_wt += wt[i];
+
+        time=ct[i];
+    }
+
+    avg_tat /= n;
+    avg_wt /= n;
+
+    printf("\nPID\tAT\tBT\tCT\tTAT\tWT\n");
+
+    for(i=0;i<n;i++){
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n",i+1,at[i],bt[i],ct[i],tat[i],wt[i]);
+    }
+
+    printf("\nAverage Turnaround Time = %.2f", avg_tat);
+    printf("\nAverage Waiting Time = %.2f\n", avg_wt);
+
+    return 0;
+}
